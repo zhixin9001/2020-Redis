@@ -1,4 +1,8 @@
 
+- 使用列表实现任务队列
+- 优先级队列
+- 按照规则订阅
+
 Redis也可以作为任务队列。任务队列顾名思义，就是“传递任务的队列”。任务队列与消息队列什么区别呢？任务队列是逻辑模型，而消息队列是通信模型，两者是不同层次的抽象，用消息队列可以实现任务队列。
 
 与任务队列进行交互的实体有两类，一类是生产者（producer），一类是消费者（consumer）。生产者会将需要处理的任务放入任务队列中，而消费者则不断地从任务队列中读入任务信息并执行。
@@ -14,6 +18,15 @@ BRPOP命令接收两个参数，第一个是键名，第二个是超时时间，
 
 #### 开启多个客户端
 为了测试消息通知，可以开启多个redis-cli实例。
+如果使用的是redis的docker镜像的话，可以先启动一个redis容器作为redis server：
+```
+docker run --name redisserver -d -p 6379:6379 redis redis-server
+```
+redis-server命令可以启动redis server。
+然后可以多开几个终端，都执行下面的命令以启动redis容器，并连接之前启动的redisserver，这样就可以作为redis client使用了：
+```
+docker run -it --link redisserver:redis --rm redis redis-cli -h redisserver -p 6379
+```
 
 在实例A中输入：
 ```
